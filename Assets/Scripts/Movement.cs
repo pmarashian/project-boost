@@ -6,6 +6,7 @@ public class Movement : MonoBehaviour
 {
 
     Rigidbody rb;
+    AudioSource thrustSound;
 
     [SerializeField] private float angularSpeed = 5f;
     [SerializeField] private float thrust = 2f;
@@ -14,6 +15,8 @@ public class Movement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        thrustSound = GetComponent<AudioSource>();
+        thrustSound.enabled = false;
     }
 
 
@@ -28,6 +31,11 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             rb.AddRelativeForce(Vector3.up * thrust * Time.deltaTime);
+            thrustSound.enabled = true;
+        }
+        else
+        {
+            thrustSound.enabled = false;
         }
     }
 
