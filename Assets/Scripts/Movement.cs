@@ -35,17 +35,19 @@ public class Movement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            rotate(1);
+            ApplyRotation(1);
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            rotate(-1);
+            ApplyRotation(-1);
         }
 
     }
 
-    private void rotate(int direction)
+    private void ApplyRotation(float direction)
     {
+        rb.freezeRotation = true;
         transform.Rotate(Vector3.forward * Time.deltaTime * angularSpeed * direction);
+        rb.freezeRotation = false;
     }
 }
