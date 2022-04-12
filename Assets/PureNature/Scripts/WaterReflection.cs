@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaterReflection : MonoBehaviour
+public class WaterReflectionPureNature : MonoBehaviour
 {
     public Transform probe;
     private Transform playerCamera;
