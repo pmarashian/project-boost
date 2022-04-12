@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
@@ -17,9 +16,15 @@ public class CollisionHandler : MonoBehaviour
                 break;
 
             default:
-                Debug.Log("You Lose!");
+                ReloadLeve();
                 break;
         }
 
+    }
+
+    private void ReloadLeve()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
     }
 }
