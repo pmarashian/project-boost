@@ -8,7 +8,8 @@ public class CollisionHandler : MonoBehaviour
         switch (other.gameObject.tag)
         {
             case "Finish":
-                Debug.Log("You Win!");
+                Debug.Log("You win!");
+                LoadNextLeve();
                 break;
 
             case "Friendly":
@@ -16,13 +17,41 @@ public class CollisionHandler : MonoBehaviour
                 break;
 
             default:
-                ReloadLeve();
+                StartCrashSequence();
                 break;
         }
 
     }
 
-    private void ReloadLeve()
+    private void StartCrashSequence()
+    {
+        Debug.Log("You lose!");
+        gameObject.GetComponent<Movement>().enabled = false;
+        Invoke("ReloadLevel", 2f);
+    }
+
+    private void LoadNextLeve()
+    {
+
+        // get total number of scenes
+        int totalScenes = SceneManager.sceneCountInBuildSettings;
+
+        // if current scene is last scene, load first scene
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (currentSceneIndex == totalScenes - 1)
+        {
+            SceneManager.LoadScene(0);
+        }
+        else
+        {
+            // load next scene
+            SceneManager.LoadScene(currentSceneIndex + 1);
+        }
+
+    }
+
+
+    private void ReloadLevel()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentSceneName);
