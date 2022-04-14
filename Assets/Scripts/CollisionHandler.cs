@@ -3,17 +3,33 @@ using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
+
+    [SerializeField] private AudioClip deathClip;
+    [SerializeField] private AudioClip finishClip;
+    [SerializeField] private ParticleSystem successParticles;
+    [SerializeField] private ParticleSystem crashParticles;
+
+    private AudioSource audioSource;
+
+    bool inLoop = false;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     private void OnCollisionEnter(Collision other)
     {
+
+        if (inLoop) { return; }
+
         switch (other.gameObject.tag)
         {
             case "Finish":
-                Debug.Log("You win!");
-                LoadNextLeve();
+                StartSuccessSequence();
                 break;
 
             case "Friendly":
-                Debug.Log("Friendly");
                 break;
 
             default:
@@ -23,14 +39,25 @@ public class CollisionHandler : MonoBehaviour
 
     }
 
+    private void StartSuccessSequence()
+    {
+        inLoop = true;
+        audioSource.PlayOneShot(finishClip);
+        successParticles.Play();
+        gameObject.GetComponent<Movement>().enabled = false;
+        Invoke("LoadNextLevel", 3f);
+    }
+
     private void StartCrashSequence()
     {
-        Debug.Log("You lose!");
+        inLoop = true;
+        audioSource.PlayOneShot(deathClip);
+        crashParticles.Play();
         gameObject.GetComponent<Movement>().enabled = false;
         Invoke("ReloadLevel", 2f);
     }
 
-    private void LoadNextLeve()
+    private void LoadNextLevel()
     {
 
         // get total number of scenes

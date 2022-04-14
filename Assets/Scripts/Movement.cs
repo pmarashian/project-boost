@@ -6,17 +6,23 @@ public class Movement : MonoBehaviour
 {
 
     Rigidbody rb;
-    AudioSource thrustSound;
+    AudioSource audioSource;
 
     [SerializeField] private float angularSpeed = 5f;
     [SerializeField] private float thrust = 2f;
+    [SerializeField] private AudioClip thrustClip;
+
+    [SerializeField] private ParticleSystem mainThrustParticles;
+    [SerializeField] private ParticleSystem thruster1Particles;
+    [SerializeField] private ParticleSystem thruster2Particles;
+    [SerializeField] private ParticleSystem thruster3Particles;
+    [SerializeField] private ParticleSystem thruster4Particles;
 
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        thrustSound = GetComponent<AudioSource>();
-        thrustSound.enabled = false;
+        audioSource = GetComponent<AudioSource>();
     }
 
 
@@ -31,12 +37,41 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             rb.AddRelativeForce(Vector3.up * thrust * Time.deltaTime);
-            thrustSound.enabled = true;
+
+            if (!audioSource.isPlaying)
+            {
+                audioSource.PlayOneShot(thrustClip);
+            }
+
+            if (!mainThrustParticles.isPlaying)
+            {
+                playParticles();
+            }
+
         }
         else
         {
-            thrustSound.enabled = false;
+            audioSource.Stop();
+            stopParticles();
         }
+    }
+
+    private void playParticles()
+    {
+        mainThrustParticles.Play();
+        thruster1Particles.Play();
+        thruster2Particles.Play();
+        thruster3Particles.Play();
+        thruster4Particles.Play();
+    }
+
+    private void stopParticles()
+    {
+        mainThrustParticles.Stop();
+        thruster1Particles.Stop();
+        thruster2Particles.Stop();
+        thruster3Particles.Stop();
+        thruster4Particles.Stop();
     }
 
     private void ProcessRotation()
