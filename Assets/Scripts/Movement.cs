@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -8,8 +6,8 @@ public class Movement : MonoBehaviour
     Rigidbody rb;
     AudioSource audioSource;
 
-    [SerializeField] private float angularSpeed = 5f;
-    [SerializeField] private float thrust = 2f;
+    [SerializeField] private float angularSpeed = 10f;
+    [SerializeField] private float thrust = 4f;
     [SerializeField] private AudioClip thrustClip;
 
     [SerializeField] private ParticleSystem mainThrustParticles;
@@ -36,42 +34,43 @@ public class Movement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            rb.AddRelativeForce(Vector3.up * thrust * Time.deltaTime);
-
-            if (!audioSource.isPlaying)
-            {
-                audioSource.PlayOneShot(thrustClip);
-            }
-
-            if (!mainThrustParticles.isPlaying)
-            {
-                playParticles();
-            }
-
+            startThrusting();
         }
         else
         {
-            audioSource.Stop();
-            stopParticles();
+            stopThrusting();
         }
     }
 
-    private void playParticles()
+    private void startThrusting()
     {
-        mainThrustParticles.Play();
-        thruster1Particles.Play();
-        thruster2Particles.Play();
-        thruster3Particles.Play();
-        thruster4Particles.Play();
+        rb.AddRelativeForce(Vector3.up * thrust * Time.deltaTime);
+
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(thrustClip);
+        }
+
+        if (!mainThrustParticles.isPlaying)
+        {
+            playMainThrustParticles();
+        }
     }
 
-    private void stopParticles()
+    private void stopThrusting()
+    {
+        audioSource.Stop();
+        stopMainThrustParticles();
+    }
+
+    private void playMainThrustParticles()
+    {
+        mainThrustParticles.Play();
+    }
+
+    private void stopMainThrustParticles()
     {
         mainThrustParticles.Stop();
-        thruster1Particles.Stop();
-        thruster2Particles.Stop();
-        thruster3Particles.Stop();
-        thruster4Particles.Stop();
     }
 
     private void ProcessRotation()
@@ -79,10 +78,12 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             ApplyRotation(1);
+            handleLeftThrusters();
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
             ApplyRotation(-1);
+            handleRightThrusters();
         }
 
     }
@@ -92,5 +93,30 @@ public class Movement : MonoBehaviour
         rb.freezeRotation = true;
         transform.Rotate(Vector3.forward * Time.deltaTime * angularSpeed * direction);
         rb.freezeRotation = false;
+    }
+
+    private void handleLeftThrusters()
+    {
+
+        if (!thruster1Particles.isPlaying)
+        {
+            thruster1Particles.Play();
+            thruster2Particles.Play();
+        }
+
+        thruster3Particles.Stop();
+        thruster4Particles.Stop();
+    }
+
+    private void handleRightThrusters()
+    {
+        if (!thruster3Particles.isPlaying)
+        {
+            thruster3Particles.Play();
+            thruster4Particles.Play();
+        }
+
+        thruster1Particles.Stop();
+        thruster2Particles.Stop();
     }
 }

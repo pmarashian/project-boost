@@ -9,6 +9,8 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] private ParticleSystem successParticles;
     [SerializeField] private ParticleSystem crashParticles;
 
+    [SerializeField] private bool collisionsEnabled = true;
+
     private AudioSource audioSource;
 
     bool inLoop = false;
@@ -16,6 +18,24 @@ public class CollisionHandler : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            toggleCollisions();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+    }
+
+    void toggleCollisions()
+    {
+        collisionsEnabled = !collisionsEnabled;
     }
 
     private void OnCollisionEnter(Collision other)
@@ -50,6 +70,9 @@ public class CollisionHandler : MonoBehaviour
 
     private void StartCrashSequence()
     {
+
+        if (!collisionsEnabled) { return; }
+
         inLoop = true;
         audioSource.PlayOneShot(deathClip);
         crashParticles.Play();
