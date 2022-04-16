@@ -16,6 +16,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private ParticleSystem thruster3Particles;
     [SerializeField] private ParticleSystem thruster4Particles;
 
+    bool gamePaused = false;
+
 
     void Start()
     {
@@ -28,6 +30,26 @@ public class Movement : MonoBehaviour
     {
         ProcessRotation();
         ProcessThrust();
+
+        // toggle pause game when spacebar is pressed
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+
+            if (gamePaused)
+            {
+                Time.timeScale = 1;
+                gamePaused = false;
+            }
+            else
+            {
+                Time.timeScale = 0;
+                gamePaused = true;
+            }
+
+            
+        }
+        
+        
     }
 
     private void ProcessThrust()

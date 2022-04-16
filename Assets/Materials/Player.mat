@@ -12,9 +12,10 @@ Material:
   m_ValidKeywords:
   - TCP2_DISABLE_WRAPPED_LIGHT
   - TCP2_SPEC_TOON
+  - _EMISSION
   m_InvalidKeywords:
   - TCP2_UV_NORMALS_FULL
-  m_LightmapFlags: 4
+  m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
